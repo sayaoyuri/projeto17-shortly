@@ -6,4 +6,4 @@ export const createToken = (data, key) => {
 
 export const verifyToken = (token, key) => {
   return Jwt.verify(token, key);
-}
+};
