@@ -36,7 +36,7 @@ export const signIn = async (req, res) => {
 
     const { id, name } = result.rows[0];
     const userData = { id, name, email };
-    const token = createToken(userData, process.env.SESSION_TOKEN_KEY);
+    const token = createToken(userData, process.env.SESSION_TOKEN_KEY || 'signintoken');
 
     await saveToken(userData.id, token);
 
