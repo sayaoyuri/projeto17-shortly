@@ -41,7 +41,7 @@ export const signIn = async (req, res) => {
 
     await saveToken(userData.id, token);
 
-    return res.send({ token: `Bearer ${token}` });
+    return res.send({ token });
   } catch (err) {
     return res.status(500).send(err.message);
   };
