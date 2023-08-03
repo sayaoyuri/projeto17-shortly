@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { getUrlById, getUrlByShortUrl, saveUrl } from "../repositories/url.repository.js";
+import { deleteUrlById, getUrlById, getUrlByShortUrl, saveUrl } from "../repositories/url.repository.js";
 
 export const createShortUrl = async (req, res) => {
   try {
@@ -30,8 +30,32 @@ export const getUrl = async (req, res) => {
 
     if(result.rowCount === 0) return res.sendStatus(404);
 
-    return res.status(200).send(result.rows[0]);
+    const url = { ...result.rows[0] };
+    delete url.ownerId;
+    delete url.visitCount;
+    delete url.createdAt;
+
+    return res.status(200).send(url);
   } catch (err) {
     return res.status(500).send(err.message);
-  }
+  };
+};
+
+export const deleteUrl = async (req, res) => {
+  try {
+    const ownerId = res.locals.token.id;
+    const { id } = req.params;
+
+    const result = await getUrlById(id);
+
+    if(result.rowCount === 0) return res.sendStatus(404);
+    
+    if(result.rows[0].ownerId !== ownerId) return res.sendStatus(401);
+
+    await deleteUrlById(id, ownerId);
+
+    return res.sendStatus(204);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  };
 };
