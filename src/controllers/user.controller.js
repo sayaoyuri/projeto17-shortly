@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { createUser, getUser } from "../repositories/user.repository.js";
-import { createToken } from '../auth/token.auth.js';
+import { createToken } from '../middlewares/auth.middleware.js';
 import { saveToken } from '../repositories/session.repository.js';
 
 export const signUp = async (req, res) => {
