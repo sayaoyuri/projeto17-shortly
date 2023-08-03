@@ -5,6 +5,6 @@ import { shortenSchema } from "../schemas/url.schema.js";
 import { createShortUrl } from "../controllers/url.controller.js";
 
 const urlRouter = Router();
-urlRouter.post('/url/shorten', validateToken('signintoken'), validateSchema(shortenSchema), createShortUrl);
+urlRouter.post('/urls/shorten', validateToken('signintoken'), validateSchema(shortenSchema), createShortUrl);
 
 export default urlRouter;
