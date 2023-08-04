@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { deleteUrlById, getUrlById, getUrlByShortUrl, saveUrl } from "../repositories/url.repository.js";
+import { deleteUrlById, getUrlById, getUrlByShortUrl, incrementVisitCount, saveUrl } from "../repositories/url.repository.js";
 
 export const createShortUrl = async (req, res) => {
   try {
@@ -36,6 +36,25 @@ export const getUrl = async (req, res) => {
     delete url.createdAt;
 
     return res.status(200).send(url);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  };
+};
+
+export const openShortUrl = async (req, res) => {
+  try {
+    const { shortUrl } = req.params;
+
+    const result = await getUrlByShortUrl(shortUrl);
+    if(result.rowCount === 0) return res.sendStatus(404);
+
+    const { id, url, visitCount } = result.rows[0];
+
+    const newVisitCount = visitCount + 1;
+
+    await incrementVisitCount(id, newVisitCount);
+
+    return res.redirect(url);
   } catch (err) {
     return res.status(500).send(err.message);
   };

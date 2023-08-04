@@ -15,3 +15,7 @@ export const getUrlByShortUrl = async(shortUrl) => {
 export const deleteUrlById = async (id, ownerId) => {
   return await db.query(`DELETE FROM urls WHERE id = $1 AND "ownerId" = $2;`, [id, ownerId]);
 };
+
+export const incrementVisitCount = async (id, newVisitCount) => {
+  return await db.query(`UPDATE urls SET "visitCount" = $2 WHERE id = $1`, [id, newVisitCount]);
+};
