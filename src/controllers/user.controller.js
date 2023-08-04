@@ -54,7 +54,7 @@ export const getUserInfo = async (req, res) => {
 
     const result = await getUserData(id);
 
-    return res.send(result.rows);
+    return res.send(result.rows[0]);
   } catch (error) {
     return res.status(500).send(error.message)
   };

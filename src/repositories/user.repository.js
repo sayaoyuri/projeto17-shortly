@@ -17,7 +17,7 @@ export const getUserData = async (id) => {
         SELECT id, "shortUrl", url, "visitCount" 
           FROM urls WHERE urls."ownerId" = u.id ORDER BY urls.id
         ) AS "allUrls"
-      ) AS "shortnedUrls"
+      ) AS "shortenedUrls"
       FROM users u
       JOIN urls
         ON u.id = urls."ownerId"
