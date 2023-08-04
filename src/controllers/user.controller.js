@@ -2,9 +2,10 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { createUser, getUser } from "../repositories/user.repository.js";
+import { createUser, getUser, getUserData } from "../repositories/user.repository.js";
 import { createToken } from '../middlewares/auth.middleware.js';
 import { saveToken } from '../repositories/session.repository.js';
+import { db } from '../database/db.connection.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -44,5 +45,17 @@ export const signIn = async (req, res) => {
     return res.send({ token });
   } catch (err) {
     return res.status(500).send(err.message);
+  };
+};
+
+export const getUserInfo = async (req, res) => {
+  try {
+    const { id } = res.locals.token;
+
+    const result = await getUserData(id);
+
+    return res.send(result.rows);
+  } catch (error) {
+    return res.status(500).send(error.message)
   };
 };
