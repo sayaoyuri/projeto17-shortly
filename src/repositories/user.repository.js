@@ -25,3 +25,15 @@ export const getUserData = async (id) => {
       GROUP BY u.id;
   `, [id]);
 };
+
+export const getUsersByVisitCount = async () => {
+  return await db.query(`
+    SELECT u1.id, u1.name, COUNT(u2.id) AS "linksCount", SUM(u2."visitCount") AS "visitCount" 
+      FROM users u1
+      LEFT JOIN urls u2
+        ON u1.id = u2."ownerId"
+      GROUP BY u1.id
+      ORDER BY "visitCount" DESC NULLS LAST
+      LIMIT 10;
+  `);
+};

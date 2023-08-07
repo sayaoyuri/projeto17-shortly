@@ -2,10 +2,9 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { createUser, getUser, getUserData } from "../repositories/user.repository.js";
+import { createUser, getUser, getUserData, getUsersByVisitCount } from "../repositories/user.repository.js";
 import { createToken } from '../middlewares/auth.middleware.js';
 import { saveToken } from '../repositories/session.repository.js';
-import { db } from '../database/db.connection.js';
 
 export const signUp = async (req, res) => {
   try {
@@ -59,3 +58,13 @@ export const getUserInfo = async (req, res) => {
     return res.status(500).send(error.message)
   };
 };
+
+export const getRanking = async (req, res) => {
+  try {
+    const result = await getUsersByVisitCount();
+
+    return res.send(result.rows);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
