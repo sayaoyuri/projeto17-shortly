@@ -30,11 +30,7 @@ export const getUserInfo = async (req, res) => {
 };
 
 export const getRanking = async (req, res) => {
-  try {
-    const result = await getUsersByVisitCount();
+  const ranking = await userService.findUsersByVisitCount();
 
-    return res.send(result.rows);
-  } catch (err) {
-    return res.status(500).send(err.message);
-  }
+  return res.status(200).send(ranking);
 }

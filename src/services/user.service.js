@@ -36,4 +36,10 @@ async function findUserInfo({ id }) {
   return userInfo.rows[0];
 }
 
-export const userService = { signUp, signIn, findUserInfo };
+async function findUsersByVisitCount() {
+  const ranking = await userRespository.getUsersByVisitCount();
+
+  return ranking.rows;
+}
+
+export const userService = { signUp, signIn, findUserInfo, findUsersByVisitCount };

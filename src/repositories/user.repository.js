@@ -38,4 +38,4 @@ export const getUsersByVisitCount = async () => {
   `);
 };
 
-export const userRespository =  { createUser, getUser, getUserData }
+export const userRespository =  { createUser, getUser, getUserData, getUsersByVisitCount }
