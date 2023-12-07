@@ -1,7 +1,7 @@
 import Jwt from "jsonwebtoken";
 import { getToken } from '../repositories/session.repository.js'
 
-export const createToken = (data, key) => {
+export const generateToken = (data, key) => {
   return Jwt.sign(data, key);
 };
 

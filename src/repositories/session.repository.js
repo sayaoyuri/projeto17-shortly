@@ -7,3 +7,5 @@ export const saveToken = async (userId, token) => {
 export const getToken = async (token) => {
   return await db.query(`SELECT * FROM sessions WHERE token = $1`, [token]);
 };
+
+export const sessionRepository =  { saveToken, getToken };

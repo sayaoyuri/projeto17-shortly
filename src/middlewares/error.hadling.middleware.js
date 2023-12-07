@@ -1,5 +1,5 @@
 export default function(error, req, res, next) {
-
+  
   if(error.name === 'UnauthorizedError') return res.status(401).send(error.message);
   
   if(error.name === 'NotFoundError') return res.status(404).send(error.message);

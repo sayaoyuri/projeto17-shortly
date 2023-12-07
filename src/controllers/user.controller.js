@@ -2,9 +2,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { getUser, getUserData, getUsersByVisitCount } from "../repositories/user.repository.js";
-import { createToken } from '../middlewares/auth.middleware.js';
-import { saveToken } from '../repositories/session.repository.js';
+import { getUserData, getUsersByVisitCount } from "../repositories/user.repository.js";
 import { userService } from '../services/user.service.js';
 
 export const signUp = async (req, res) => {
@@ -16,28 +14,11 @@ export const signUp = async (req, res) => {
 };
 
 export const signIn = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    const result = await getUser(email);
+  const token = await userService.signIn({ email, password });
 
-    const invalidUserMsg = "E-mail e ou senha inválido(os)!";
-
-    if(result.rowCount === 0)return res.status(401).send({ message: invalidUserMsg });
-    
-    const matchPassword = bcrypt.compareSync(password, result.rows[0].password);
-    if(!matchPassword) return res.status(401).send({ message: invalidUserMsg });
-
-    const { id, name } = result.rows[0];
-    const userData = { id, name, email };
-    const token = createToken(userData, process.env.SESSION_TOKEN_KEY || 'signintoken');
-
-    await saveToken(userData.id, token);
-
-    return res.send({ token });
-  } catch (err) {
-    return res.status(500).send(err.message);
-  };
+  return res.send({ token });
 };
 
 export const getUserInfo = async (req, res) => {
