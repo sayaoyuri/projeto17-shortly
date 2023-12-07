@@ -2,24 +2,17 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { createUser, getUser, getUserData, getUsersByVisitCount } from "../repositories/user.repository.js";
+import { getUser, getUserData, getUsersByVisitCount } from "../repositories/user.repository.js";
 import { createToken } from '../middlewares/auth.middleware.js';
 import { saveToken } from '../repositories/session.repository.js';
+import { userService } from '../services/user.service.js';
 
 export const signUp = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+  const { name, email, password } = req.body;
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
+  await userService.signUp({ name, email, password });
 
-    await createUser(name, email, hashedPassword);
-  
-    return res.sendStatus(201);
-  } catch (err) {
-    if(err.code === '23505') return res.status(409).send({ message: "O e-mail informado já está em uso!" });
-
-    return res.status(500).send(err.message);
-  };
+  return res.sendStatus(201);
 };
 
 export const signIn = async (req, res) => {

@@ -37,3 +37,5 @@ export const getUsersByVisitCount = async () => {
       LIMIT 10;
   `);
 };
+
+export const userRespository =  { createUser, getUser }

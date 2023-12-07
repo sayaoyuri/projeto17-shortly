@@ -1,6 +1,6 @@
 export function notFoundError(entity = 'Resource') {
   return {
-    name: 'NotFound',
+    name: 'NotFoundError',
     message: `${entity} not found!`,
   };
 }
