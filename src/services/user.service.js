@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { userRespository } from '../repositories/user.repository.js';
+import { getUserData, userRespository } from '../repositories/user.repository.js';
 import { conflictError } from '../errors/conflict.error.js'
 import { unauthorizedError } from '../errors/unauthorized.error.js';
 import { generateToken } from '../middlewares/auth.middleware.js';
@@ -30,4 +30,10 @@ async function signIn({ email, password }) {
   return token;
 }
 
-export const userService = { signUp, signIn };
+async function findUserInfo({ id }) {
+  const userInfo = await userRespository.getUserData(id);
+
+  return userInfo.rows[0];
+}
+
+export const userService = { signUp, signIn, findUserInfo };

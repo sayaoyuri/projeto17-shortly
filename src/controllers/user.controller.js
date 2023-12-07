@@ -22,15 +22,11 @@ export const signIn = async (req, res) => {
 };
 
 export const getUserInfo = async (req, res) => {
-  try {
-    const { id } = res.locals.token;
+  const { id } = res.locals.token;
 
-    const result = await getUserData(id);
+  const userInfo = await userService.findUserInfo({ id });
 
-    return res.send(result.rows[0]);
-  } catch (error) {
-    return res.status(500).send(error.message)
-  };
+  return res.status(200).send(userInfo);
 };
 
 export const getRanking = async (req, res) => {

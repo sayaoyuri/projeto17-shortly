@@ -10,7 +10,7 @@ export async function getUser (email) {
   return await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
 };
 
-export const getUserData = async (id) => {
+export const getUserData = async ({ id }) => {
   return await db.query(`
     SELECT u.id, u.name, SUM(urls."visitCount") AS "visitCount", 
       (SELECT json_agg(row_to_json("allUrls")) FROM (
@@ -38,4 +38,4 @@ export const getUsersByVisitCount = async () => {
   `);
 };
 
-export const userRespository =  { createUser, getUser }
+export const userRespository =  { createUser, getUser, getUserData }
