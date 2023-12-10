@@ -1,25 +1,13 @@
-import { nanoid } from "nanoid";
-import { deleteUrlById, getUrlById, getUrlByShortUrl, incrementVisitCount, saveUrl } from "../repositories/url.repository.js";
+import { deleteUrlById, getUrlById, getUrlByShortUrl, incrementVisitCount } from "../repositories/url.repository.js";
+import { urlService } from "../services/url.service.js";
 
 export const createShortUrl = async (req, res) => {
-  try {
-    const ownerId = res.locals.token.id;
-    const { url } = req.body;
+  const ownerId = res.locals.token.id;
+  const { url } = req.body;
 
-    const urlShortId = nanoid(8);
-    
-    await saveUrl(ownerId, url, urlShortId);
+  const createdUrl = await urlService.create({ ownerId, url });
 
-    const result = await getUrlByShortUrl(urlShortId);
-
-    const { id, shortUrl } = result.rows[0]
-
-    return res.status(201).send({ id, shortUrl })
-  } catch (err) {
-    if(err.code === '23503') return res.sendStatus(401);
-
-    return res.status(500).send(err.message);
-  };
+  return res.status(201).send(createdUrl)
 };
 
 export const getUrl = async (req, res) => {

@@ -1,7 +1,9 @@
 import { db } from "../database/db.connection.js";
 
-export const saveUrl = async (ownerId, url, shortUrl) => {
-  return await db.query(`INSERT INTO urls ("ownerId", url, "shortUrl") VALUES ($1, $2, $3)`, [ownerId, url, shortUrl]);
+export const saveUrl = async ({ ownerId, url, shortUrl }) => {
+  return await db.query(`
+    INSERT INTO urls ("ownerId", url, "shortUrl") VALUES ($1, $2, $3) returning id, "shortUrl"
+  `, [ownerId, url, shortUrl]);
 };
 
 export const getUrlById = async(id) => {
@@ -19,3 +21,5 @@ export const deleteUrlById = async (id, ownerId) => {
 export const incrementVisitCount = async (id, newVisitCount) => {
   return await db.query(`UPDATE urls SET "visitCount" = $2 WHERE id = $1`, [id, newVisitCount]);
 };
+
+export const urlRepository = { saveUrl };
