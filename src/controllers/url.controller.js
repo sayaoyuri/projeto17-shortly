@@ -1,5 +1,4 @@
-import { deleteUrlById, getUrlById } from "../repositories/url.repository.js";
-import { urlService } from "../services/url.service.js";
+import { urlService } from '../services/url.service.js';
 
 export const createShortUrl = async (req, res) => {
   const ownerId = res.locals.token.id;
@@ -7,7 +6,7 @@ export const createShortUrl = async (req, res) => {
 
   const createdUrl = await urlService.create({ ownerId, url });
 
-  return res.status(201).send(createdUrl)
+  return res.status(201).send(createdUrl);
 };
 
 export const getUrl = async (req, res) => {
@@ -31,6 +30,6 @@ export const deleteUrl = async (req, res) => {
   const { id } = req.params;
 
   await urlService.deleteUrl({ id, ownerId });
-  
+
   return res.sendStatus(204);
 };

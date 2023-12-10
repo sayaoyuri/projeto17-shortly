@@ -6,11 +6,7 @@ import router from './routes/index.routes.js';
 import errorHadlingMiddleware from './middlewares/error.hadling.middleware.js';
 
 const app = express();
-app
-.use(cors())
-.use(express.json())
-.use(router)
-.use(errorHadlingMiddleware);
+app.use(cors()).use(express.json()).use(router).use(errorHadlingMiddleware);
 
 dotenv.config();
 

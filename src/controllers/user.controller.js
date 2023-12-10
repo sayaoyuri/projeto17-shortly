@@ -1,8 +1,6 @@
-import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { getUserData, getUsersByVisitCount } from "../repositories/user.repository.js";
 import { userService } from '../services/user.service.js';
 
 export const signUp = async (req, res) => {
@@ -33,4 +31,4 @@ export const getRanking = async (req, res) => {
   const ranking = await userService.findUsersByVisitCount();
 
   return res.status(200).send(ranking);
-}
+};
