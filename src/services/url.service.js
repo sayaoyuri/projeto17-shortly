@@ -27,4 +27,17 @@ async function findById ({ id }) {
   return url;
 }
 
-export const urlService = { create, findById };
+async function openShortUrl({ shortUrl }) {
+  const result = await urlRepository.getUrlByShortUrl({ shortUrl });
+  if(result.rowCount === 0) throw notFoundError('Url');
+
+  const { id, url, visitCount } = result.rows[0];
+
+  const newVisitCount = visitCount + 1;
+
+  await urlRepository.updateVisitCount({ id, newVisitCount });
+
+  return url;
+}
+
+export const urlService = { create, findById, openShortUrl };

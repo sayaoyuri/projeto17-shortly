@@ -1,4 +1,4 @@
-import { deleteUrlById, getUrlById, getUrlByShortUrl, incrementVisitCount } from "../repositories/url.repository.js";
+import { deleteUrlById, getUrlById } from "../repositories/url.repository.js";
 import { urlService } from "../services/url.service.js";
 
 export const createShortUrl = async (req, res) => {
@@ -19,22 +19,11 @@ export const getUrl = async (req, res) => {
 };
 
 export const openShortUrl = async (req, res) => {
-  try {
-    const { shortUrl } = req.params;
+  const { shortUrl } = req.params;
 
-    const result = await getUrlByShortUrl(shortUrl);
-    if(result.rowCount === 0) return res.sendStatus(404);
+  const url = await urlService.openShortUrl({ shortUrl });
 
-    const { id, url, visitCount } = result.rows[0];
-
-    const newVisitCount = visitCount + 1;
-
-    await incrementVisitCount(id, newVisitCount);
-
-    return res.redirect(url);
-  } catch (err) {
-    return res.status(500).send(err.message);
-  };
+  return res.redirect(url);
 };
 
 export const deleteUrl = async (req, res) => {
