@@ -7,19 +7,15 @@ export const generateToken = (data, key) => {
 
 export const validateToken = (SECRET_KEY) => {
   return async (req, res, next) => {
-    try {
-      if (!req.headers.authorization) return res.sendStatus(401);
+    if (!req.headers.authorization) return res.sendStatus(401);
 
-      const token = req.headers.authorization?.replace('Bearer ', '');
+    const token = req.headers.authorization?.replace('Bearer ', '');
 
-      const isTokenExist = await getToken(String(token));
-      if (isTokenExist.rowCount === 0) return res.sendStatus(401);
+    const isTokenExist = await getToken(String(token));
+    if (isTokenExist.rowCount === 0) return res.sendStatus(401);
 
-      res.locals.token = Jwt.verify(token, SECRET_KEY);
+    res.locals.token = Jwt.verify(token, SECRET_KEY);
 
-      next();
-    } catch (error) {
-      return res.sendStatus(401);
-    }
+    next();
   };
 };
