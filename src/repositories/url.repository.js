@@ -6,7 +6,7 @@ export const saveUrl = async ({ ownerId, url, shortUrl }) => {
   `, [ownerId, url, shortUrl]);
 };
 
-export const getUrlById = async(id) => {
+export const getUrlById = async({ id }) => {
   return await db.query(`SELECT * FROM urls WHERE id = $1`, [id]);
 };
 
@@ -22,4 +22,4 @@ export const incrementVisitCount = async (id, newVisitCount) => {
   return await db.query(`UPDATE urls SET "visitCount" = $2 WHERE id = $1`, [id, newVisitCount]);
 };
 
-export const urlRepository = { saveUrl };
+export const urlRepository = { saveUrl, getUrlById };

@@ -11,22 +11,11 @@ export const createShortUrl = async (req, res) => {
 };
 
 export const getUrl = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const result = await getUrlById(id);
+  const url = await urlService.findById({ id });
 
-    if(result.rowCount === 0) return res.sendStatus(404);
-
-    const url = { ...result.rows[0] };
-    delete url.ownerId;
-    delete url.visitCount;
-    delete url.createdAt;
-
-    return res.status(200).send(url);
-  } catch (err) {
-    return res.status(500).send(err.message);
-  };
+  return res.status(200).send(url);
 };
 
 export const openShortUrl = async (req, res) => {
