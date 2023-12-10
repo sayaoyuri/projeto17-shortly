@@ -6,16 +6,16 @@ import { generateToken } from '../middlewares/auth.middleware.js';
 import { sessionRepository } from '../repositories/session.repository.js';
 
 async function signUp({ name, email, password }) {
-  const { rowCount: existingUserCount } = await userRespository.getUser(email);
+  const { rowCount: existingUserCount } = await userRespository.getUser({ email });
   if (existingUserCount !== 0) throw conflictError('E-mail');
 
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  await userRespository.createUser(name, email, hashedPassword);
+  await userRespository.createUser({ name, email, hashedPassword });
 }
 
 async function signIn({ email, password }) {
-  const existingUser = await userRespository.getUser(email);
+  const existingUser = await userRespository.getUser({ email });
   if (existingUser.rowCount === 0) throw unauthorizedError();
 
   const comparePasswordHash = bcrypt.compareSync(password, existingUser.rows[0].password);
@@ -31,7 +31,7 @@ async function signIn({ email, password }) {
 }
 
 async function findUserInfo({ id }) {
-  const userInfo = await userRespository.getUserData(id);
+  const userInfo = await userRespository.getUserData({id});
 
   return userInfo.rows[0];
 }
