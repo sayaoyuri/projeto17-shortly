@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { urlRepository } from "../repositories/url.repository.js";
 import { notFoundError } from "../errors/notFound.error.js";
+import { unauthorizedError } from "../errors/unauthorized.error.js";
 
 function generateUrlId () {
   return nanoid(8);
@@ -40,4 +41,14 @@ async function openShortUrl({ shortUrl }) {
   return url;
 }
 
-export const urlService = { create, findById, openShortUrl };
+async function deleteUrl ({ id, ownerId }) {
+  const result = await urlRepository.getUrlById({ id });
+
+  if(result.rowCount === 0) throw notFoundError('Url');
+  
+  if(result.rows[0].ownerId !== ownerId) throw unauthorizedError();
+
+  await urlRepository.deleteUrlById({ id, ownerId });
+}
+
+export const urlService = { create, findById, openShortUrl, deleteUrl };

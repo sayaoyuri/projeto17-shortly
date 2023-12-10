@@ -27,20 +27,10 @@ export const openShortUrl = async (req, res) => {
 };
 
 export const deleteUrl = async (req, res) => {
-  try {
-    const ownerId = res.locals.token.id;
-    const { id } = req.params;
+  const ownerId = res.locals.token.id;
+  const { id } = req.params;
 
-    const result = await getUrlById(id);
-
-    if(result.rowCount === 0) return res.sendStatus(404);
-    
-    if(result.rows[0].ownerId !== ownerId) return res.sendStatus(401);
-
-    await deleteUrlById(id, ownerId);
-
-    return res.sendStatus(204);
-  } catch (err) {
-    return res.status(500).send(err.message);
-  };
+  await urlService.deleteUrl({ id, ownerId });
+  
+  return res.sendStatus(204);
 };
